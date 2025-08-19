@@ -1,4 +1,4 @@
-package com.example.bl_loaning
+package com.example.bl_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
