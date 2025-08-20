@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/blockchain_service_sepolia.dart';
+import '../config/blockchain_config.dart';
 
 class LoanApplicationPage extends StatefulWidget {
   const LoanApplicationPage({super.key});
@@ -9,6 +11,161 @@ class LoanApplicationPage extends StatefulWidget {
 
 class _LoanApplicationPageState extends State<LoanApplicationPage> {
   final _amountController = TextEditingController();
+  final BlockchainService _blockchainService = BlockchainService();
+
+  bool _isLoading = false;
+  String _creditScore = '';
+  String _creditRating = '';
+  String _maxLoanAmount = '';
+  bool _borrowerAdded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeBlockchainData();
+  }
+
+  Future<void> _initializeBlockchainData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Add borrower to blockchain if not already added
+      if (!_borrowerAdded) {
+        await _addBorrowerToBlockchain();
+        _borrowerAdded = true;
+
+        // Wait for transaction to be mined
+        print('Waiting for transaction to be mined...');
+        await Future.delayed(Duration(seconds: 10));
+      }
+
+      // Get credit score and related data
+      await _fetchCreditData();
+    } catch (e) {
+      print('Error initializing blockchain data: $e');
+      _showErrorDialog('Failed to connect to blockchain: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _addBorrowerToBlockchain() async {
+    try {
+      await _blockchainService.addBorrower(
+        nid: UserData.nid,
+        name: UserData.name,
+        profession: UserData.profession,
+        accountBalance: UserData.accountBalance,
+        totalTransactions: UserData.totalTransactions,
+        onTimePayments: UserData.onTimePayments,
+        missedPayments: UserData.missedPayments,
+        totalRemainingLoan: UserData.totalRemainingLoan,
+        creditAgeMonths: UserData.creditAgeMonths,
+        professionRiskScore: UserData.professionRiskScore,
+      );
+    } catch (e) {
+      print('Error adding borrower: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> _fetchCreditData() async {
+    try {
+      // Get credit score
+      final creditScore = await _blockchainService.calculateCreditScore(
+        UserData.nid,
+      );
+      _creditScore = creditScore.toString();
+
+      // Get credit rating
+      final creditRating = await _blockchainService.getCreditRating(
+        UserData.nid,
+      );
+      _creditRating = creditRating;
+
+      // Get max loan amount
+      final maxLoanAmount = await _blockchainService.getMaxLoanAmount(
+        UserData.nid,
+        UserData.monthlyIncome,
+      );
+      _maxLoanAmount = maxLoanAmount.toString();
+
+      setState(() {});
+    } catch (e) {
+      print('Error fetching credit data: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> _applyForLoan() async {
+    if (_amountController.text.isEmpty) {
+      _showErrorDialog('Please enter a loan amount');
+      return;
+    }
+
+    final loanAmount = BigInt.tryParse(_amountController.text);
+    if (loanAmount == null) {
+      _showErrorDialog('Please enter a valid loan amount');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _blockchainService.requestLoan(UserData.nid, loanAmount);
+      _showSuccessDialog('Loan application submitted successfully!');
+      _amountController.clear();
+    } catch (e) {
+      print('Error applying for loan: $e');
+      _showErrorDialog('Failed to apply for loan: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,12 +315,12 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Credit Score: 78 (Moderate)',
+                          'Credit Score: ${_creditScore.isNotEmpty ? _creditScore : "Loading..."} (${_creditRating.isNotEmpty ? _creditRating : "Loading..."})',
                           style: TextStyle(fontSize: 14, color: Colors.black87),
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Max Loan Amount: 1500000 BDT',
+                          'Max Loan Amount: ${_maxLoanAmount.isNotEmpty ? _maxLoanAmount : "Loading..."} BDT',
                           style: TextStyle(fontSize: 14, color: Colors.black87),
                         ),
                       ],
@@ -195,21 +352,33 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                         ),
                       ),
                       SizedBox(width: 10),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF2196F3),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Text(
-                          'Apply',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                      GestureDetector(
+                        onTap: _isLoading ? null : _applyForLoan,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
                           ),
+                          decoration: BoxDecoration(
+                            color: _isLoading ? Colors.grey : Color(0xFF2196F3),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: _isLoading
+                              ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'Apply',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                         ),
                       ),
                     ],
@@ -334,6 +503,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
   @override
   void dispose() {
     _amountController.dispose();
+    _blockchainService.dispose();
     super.dispose();
   }
 }
