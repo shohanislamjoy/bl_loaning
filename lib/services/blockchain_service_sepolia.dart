@@ -288,6 +288,22 @@ class BlockchainService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getPendingLoans(String nid) async {
+    try {
+      if (!_isInitialized) {
+        print('Blockchain not initialized, returning mock pending loans');
+        return []; // Empty list as no pending loans
+      }
+
+      // In a real implementation, this would fetch loans from the blockchain
+      // For now, return an empty list as we'll use account info from the config
+      return [];
+    } catch (e) {
+      print('Error getting pending loans: $e');
+      return [];
+    }
+  }
+
   Future<Map<String, dynamic>> getBorrower(String nid) async {
     try {
       if (!_isInitialized) {

@@ -171,12 +171,9 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
       // Auto-approve loan if amount is within limit
       await _approveLoan(loanAmount);
 
-      // Show success dialog with loan details
       _showSuccessDialog(
-        'Loan of ${_amountController.text} BDT approved and disbursed successfully!',
+        'Loan approved and disbursed successfully! Check your account for details.',
       );
-      
-      // Clear the amount field after successful application
       _amountController.clear();
     } catch (e) {
       print('Error applying for loan: $e');
@@ -189,10 +186,10 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
   }
 
   Future<void> _approveLoan(BigInt amount) async {
-    // Store approved loan details with more comprehensive information
+    // Store approved loan details
     final loanData = {
       'amount': amount.toString(),
-      'approvedDate': DateTime.now().toIso8601String().substring(0, 10), // Format: YYYY-MM-DD
+      'approvedDate': DateTime.now().toIso8601String(),
       'interestRate': '12.5%',
       'duration': '12 months',
       'monthlyEmi': (amount.toInt() * 1.125 / 12).round().toString(),
@@ -203,22 +200,18 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
           .add(Duration(days: 30))
           .toIso8601String()
           .substring(0, 10),
-      'disbursedAmount': amount.toString(),
-      'principal': amount.toString(),
-      'totalPayable': (amount.toInt() * 1.125).round().toString(),
     };
 
     // In a real app, you'd save this to a database or shared preferences
     print('Loan approved: $loanData');
 
     // Update user's total remaining loan in UserData (simulating persistence)
-    UserData.totalRemainingLoan = amount; // Set to current loan amount instead of adding
-    
-    // Store the loan data in UserData for display purposes
-    UserData.lastApprovedLoan = loanData;
+    UserData.totalRemainingLoan += amount;
 
-    print('Updated UserData.totalRemainingLoan: ${UserData.totalRemainingLoan}');
-    print('Loan amount approved: ${amount}');
+    // Navigate to account page to show the approved loan
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushNamed(context, '/account');
+    });
   }
 
   void _showErrorDialog(String message) {
@@ -240,139 +233,21 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
   }
 
   void _showSuccessDialog(String message) {
-    // Get the loan amount from the message since the controller might be cleared
-    final RegExp regExp = RegExp(r'(\d+) BDT');
-    final match = regExp.firstMatch(message);
-    final loanAmount = match?.group(1) ?? '0';
-    
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent dismissing by tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Row(
-            children: [
-              Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 32,
-              ),
-              SizedBox(width: 12),
-              Text(
-                'Loan Approved!',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.green[200]!),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Loan Details:',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.green[800],
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    SharedWidgets.buildDataRow(
-                      'Approved Amount',
-                      '$loanAmount BDT',
-                      isHighlight: true,
-                    ),
-                    SharedWidgets.buildDataRow(
-                      'Interest Rate',
-                      '12.5% per annum',
-                    ),
-                    SharedWidgets.buildDataRow(
-                      'Loan Duration',
-                      '12 months',
-                    ),
-                    SharedWidgets.buildDataRow(
-                      'Monthly EMI',
-                      '${(int.tryParse(loanAmount)! * 1.125 / 12).round()} BDT',
-                      isHighlight: true,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'The loan amount has been credited to your account successfully. You can check your account details for more information.',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
-              ),
-            ],
-          ),
+          title: Text('Success'),
+          content: Text(message),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'View Account Details',
-                style: TextStyle(color: Color(0xFF2196F3)),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Navigate to account page after a short delay
-                Future.delayed(Duration(milliseconds: 300), () {
-                  Navigator.pushNamed(context, '/account');
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-              ),
-              child: Text('Continue'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
             ),
           ],
         );
       },
     );
-    
-    // Auto-dismiss after 10 seconds if user doesn't interact
-    Future.delayed(Duration(seconds: 10), () {
-      if (Navigator.canPop(context)) {
-        Navigator.of(context).pop();
-        // Navigate to account page
-        Future.delayed(Duration(milliseconds: 300), () {
-          Navigator.pushNamed(context, '/account');
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _amountController.dispose();
-    _blockchainService.dispose();
-    super.dispose();
   }
 
   @override
@@ -410,11 +285,11 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CircularProgressIndicator(color: Color(0xFF2196F3)),
-                            SizedBox(height: 16),
+                            SizedBox(height: 12),
                             Text(
                               'Connecting to Blockchain...',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 14,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -423,7 +298,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                             Text(
                               'Please wait while we fetch your data',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 10,
                                 color: Colors.grey[600],
                               ),
                               textAlign: TextAlign.center,
@@ -452,20 +327,20 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                                     Icon(
                                       Icons.verified,
                                       color: Colors.green,
-                                      size: 16,
+                                      size: 14,
                                     ),
                                     SizedBox(width: 4),
                                     Text(
                                       'Blockchain Verified Data',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         color: Colors.green,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 24),
+                                SizedBox(height: 8),
                                 SharedWidgets.buildDataRow(
                                   'Name',
                                   _borrowerData['name']?.toString() ??
@@ -528,7 +403,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                             ),
                           ),
 
-                          SizedBox(height: 18),
+                          SizedBox(height: 12),
 
                           // Loan Amount Input
                           Row(
@@ -619,5 +494,12 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _blockchainService.dispose();
+    super.dispose();
   }
 }
