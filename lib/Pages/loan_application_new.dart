@@ -246,7 +246,6 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: true,
       body: Column(
         children: [
           // Top Header Section
@@ -332,208 +331,198 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
             ),
           ),
 
-          // Main Content Area - Fixed for overflow
+          // Main Content Area
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Container(
-                color: Colors.grey[200],
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    // Loading state for initialization
-                    if (_isInitializing)
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          children: [
-                            CircularProgressIndicator(color: Color(0xFF2196F3)),
-                            SizedBox(height: 16),
-                            Text(
-                              'Connecting to Blockchain...',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Please wait while we fetch your data from the blockchain',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      )
-                    else
-                      // User Information Card with dynamic data
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.verified,
-                                  color: Colors.green,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  'Blockchain Verified Data',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12),
-                            _buildDataRow(
-                              'Name',
-                              _borrowerData['name']?.toString() ?? 'Loading...',
-                            ),
-                            _buildDataRow('NID', UserData.nid),
-                            _buildDataRow(
-                              'Profession',
-                              _borrowerData['profession']?.toString() ??
-                                  'Loading...',
-                            ),
-                            _buildDataRow(
-                              'Account Balance',
-                              '${_formatBigInt(_borrowerData['accountBalance'])} BDT',
-                            ),
-                            _buildDataRow(
-                              'Total Transactions',
-                              '${_formatBigInt(_borrowerData['totalTransactions'])} BDT',
-                            ),
-                            _buildDataRow(
-                              'On-time Payments',
-                              '${_formatBigInt(_borrowerData['onTimePayments'])} payments',
-                            ),
-                            _buildDataRow(
-                              'Missed Payments',
-                              '${_formatBigInt(_borrowerData['missedPayments'])} payments',
-                            ),
-                            _buildDataRow(
-                              'Total Remaining Loan',
-                              '${_formatBigInt(_borrowerData['totalRemainingLoan'])} BDT',
-                            ),
-                            _buildDataRow(
-                              'Credit Age',
-                              _formatCreditAge(
-                                _borrowerData['creditAgeMonths'],
-                              ),
-                            ),
-                            _buildDataRow(
-                              'Profession Risk Factor',
-                              _getProfessionRiskText(
-                                _borrowerData['professionRiskScore'],
-                              ),
-                            ),
-                            Divider(height: 20, color: Colors.grey[300]),
-                            _buildDataRow(
-                              'Credit Score',
-                              _creditScore.isNotEmpty
-                                  ? '$_creditScore (${_creditRating})'
-                                  : 'Loading...',
-                              isHighlight: true,
-                            ),
-                            _buildDataRow(
-                              'Max Loan Amount',
-                              _maxLoanAmount.isNotEmpty
-                                  ? '$_maxLoanAmount BDT'
-                                  : 'Loading...',
-                              isHighlight: true,
-                            ),
-                          ],
-                        ),
+            child: Container(
+              color: Colors.grey[200],
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Loading state for initialization
+                  if (_isInitializing)
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(32),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-
-                    SizedBox(height: 20),
-
-                    // Loan Amount Input (only show when not initializing)
-                    if (!_isInitializing)
-                      Row(
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: TextField(
-                                controller: _amountController,
-                                decoration: InputDecoration(
-                                  hintText: 'Enter The Loan Amount',
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(color: Colors.grey[600]),
-                                ),
-                                keyboardType: TextInputType.number,
-                              ),
+                          CircularProgressIndicator(color: Color(0xFF2196F3)),
+                          SizedBox(height: 16),
+                          Text(
+                            'Connecting to Blockchain...',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: (_isLoading || _isInitializing)
-                                ? null
-                                : _applyForLoan,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: (_isLoading || _isInitializing)
-                                    ? Colors.grey
-                                    : Color(0xFF2196F3),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: _isLoading
-                                  ? SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
-                                  : Text(
-                                      'Apply',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Please wait while we fetch your data from the blockchain',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
+                    )
+                  else
+                    // User Information Card with dynamic data
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.verified,
+                                color: Colors.green,
+                                size: 16,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'Blockchain Verified Data',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12),
+                          _buildDataRow(
+                            'Name',
+                            _borrowerData['name']?.toString() ?? 'Loading...',
+                          ),
+                          _buildDataRow('NID', UserData.nid),
+                          _buildDataRow(
+                            'Profession',
+                            _borrowerData['profession']?.toString() ??
+                                'Loading...',
+                          ),
+                          _buildDataRow(
+                            'Account Balance',
+                            '${_formatBigInt(_borrowerData['accountBalance'])} BDT',
+                          ),
+                          _buildDataRow(
+                            'Total Transactions',
+                            '${_formatBigInt(_borrowerData['totalTransactions'])} BDT',
+                          ),
+                          _buildDataRow(
+                            'On-time Payments',
+                            '${_formatBigInt(_borrowerData['onTimePayments'])} payments',
+                          ),
+                          _buildDataRow(
+                            'Missed Payments',
+                            '${_formatBigInt(_borrowerData['missedPayments'])} payments',
+                          ),
+                          _buildDataRow(
+                            'Total Remaining Loan',
+                            '${_formatBigInt(_borrowerData['totalRemainingLoan'])} BDT',
+                          ),
+                          _buildDataRow(
+                            'Credit Age',
+                            _formatCreditAge(_borrowerData['creditAgeMonths']),
+                          ),
+                          _buildDataRow(
+                            'Profession Risk Factor',
+                            _getProfessionRiskText(
+                              _borrowerData['professionRiskScore'],
+                            ),
+                          ),
+                          Divider(height: 20, color: Colors.grey[300]),
+                          _buildDataRow(
+                            'Credit Score',
+                            _creditScore.isNotEmpty
+                                ? '$_creditScore (${_creditRating})'
+                                : 'Loading...',
+                            isHighlight: true,
+                          ),
+                          _buildDataRow(
+                            'Max Loan Amount',
+                            _maxLoanAmount.isNotEmpty
+                                ? '$_maxLoanAmount BDT'
+                                : 'Loading...',
+                            isHighlight: true,
+                          ),
+                        ],
+                      ),
+                    ),
 
-                    // Add bottom padding to ensure content is not hidden behind footer
-                    SizedBox(height: 220),
-                  ],
-                ),
+                  SizedBox(height: 20),
+
+                  // Loan Amount Input (only show when not initializing)
+                  if (!_isInitializing)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(color: Colors.grey[300]!),
+                            ),
+                            child: TextField(
+                              controller: _amountController,
+                              decoration: InputDecoration(
+                                hintText: 'Enter The Loan Amount',
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(color: Colors.grey[600]),
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: (_isLoading || _isInitializing)
+                              ? null
+                              : _applyForLoan,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: (_isLoading || _isInitializing)
+                                  ? Colors.grey
+                                  : Color(0xFF2196F3),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: _isLoading
+                                ? SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    'Apply',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
               ),
             ),
           ),

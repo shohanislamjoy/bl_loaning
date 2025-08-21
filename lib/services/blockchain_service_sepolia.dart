@@ -10,6 +10,7 @@ class BlockchainService {
   late ContractFunction _getMaxLoanAmountFunction;
   late ContractFunction _requestLoanFunction;
   late ContractFunction _getCreditRatingFunction;
+  late ContractFunction _getBorrowerFunction;
 
   bool _isInitialized = false;
 
@@ -67,6 +68,24 @@ class BlockchainService {
       "outputs": [{"internalType": "string", "name": "", "type": "string"}],
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "inputs": [{"internalType": "string", "name": "nid", "type": "string"}],
+      "name": "getBorrower",
+      "outputs": [
+        {"internalType": "string", "name": "name", "type": "string"},
+        {"internalType": "string", "name": "profession", "type": "string"},
+        {"internalType": "uint256", "name": "accountBalance", "type": "uint256"},
+        {"internalType": "uint256", "name": "totalTransactions", "type": "uint256"},
+        {"internalType": "uint256", "name": "onTimePayments", "type": "uint256"},
+        {"internalType": "uint256", "name": "missedPayments", "type": "uint256"},
+        {"internalType": "uint256", "name": "totalRemainingLoan", "type": "uint256"},
+        {"internalType": "uint256", "name": "creditAgeMonths", "type": "uint256"},
+        {"internalType": "uint256", "name": "professionRiskScore", "type": "uint256"},
+        {"internalType": "bool", "name": "exists", "type": "bool"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
     }
   ]
   ''';
@@ -112,6 +131,7 @@ class BlockchainService {
       _getMaxLoanAmountFunction = _contract.function('getMaxLoanAmount');
       _requestLoanFunction = _contract.function('requestLoan');
       _getCreditRatingFunction = _contract.function('getCreditRating');
+      _getBorrowerFunction = _contract.function('getBorrower');
 
       _isInitialized = true;
       print('Blockchain service initialized successfully');
@@ -265,6 +285,61 @@ class BlockchainService {
       print('Error requesting loan: $e');
       print('Simulating loan request with mock data');
       return 'mock_loan_tx_${DateTime.now().millisecondsSinceEpoch}';
+    }
+  }
+
+  Future<Map<String, dynamic>> getBorrower(String nid) async {
+    try {
+      if (!_isInitialized) {
+        print('Blockchain not initialized, returning mock borrower data');
+        return {
+          'name': 'Mr. Karim Uddin',
+          'profession': 'Software Engineer',
+          'accountBalance': BigInt.from(750218),
+          'totalTransactions': BigInt.from(1505220),
+          'onTimePayments': BigInt.from(28),
+          'missedPayments': BigInt.from(2),
+          'totalRemainingLoan': BigInt.from(83000),
+          'creditAgeMonths': BigInt.from(60),
+          'professionRiskScore': BigInt.from(20),
+          'exists': true,
+        };
+      }
+
+      final result = await _client.call(
+        contract: _contract,
+        function: _getBorrowerFunction,
+        params: [nid],
+      );
+
+      return {
+        'name': result[0],
+        'profession': result[1],
+        'accountBalance': result[2],
+        'totalTransactions': result[3],
+        'onTimePayments': result[4],
+        'missedPayments': result[5],
+        'totalRemainingLoan': result[6],
+        'creditAgeMonths': result[7],
+        'professionRiskScore': result[8],
+        'exists': result[9],
+      };
+    } catch (e) {
+      print('Error getting borrower: $e');
+      print('Returning mock borrower data');
+      // Return mock data as fallback
+      return {
+        'name': 'Mr. Karim Uddin',
+        'profession': 'Software Engineer',
+        'accountBalance': BigInt.from(750218),
+        'totalTransactions': BigInt.from(1505220),
+        'onTimePayments': BigInt.from(28),
+        'missedPayments': BigInt.from(2),
+        'totalRemainingLoan': BigInt.from(83000),
+        'creditAgeMonths': BigInt.from(60),
+        'professionRiskScore': BigInt.from(20),
+        'exists': true,
+      };
     }
   }
 

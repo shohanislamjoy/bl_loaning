@@ -10,7 +10,7 @@ class BlockchainConfig {
 
   // Contract details (replace with your actual deployed contract address)
   static const String contractAddress =
-      '0x4365a53810CD51A3618Aae11F4568A81922d8C5C';
+      '0x6B10D09556E1167510F6AeBe3F3Bd0A2dFFE2991';
 
   // Developer private key (⚠️ Only for testing! Never expose real wallet keys)
   static const String privateKey =
@@ -22,21 +22,22 @@ class BlockchainConfig {
 }
 
 class UserData {
-  static const String nid = '1029384999';
-  static const String name = 'Mr.karim Uddin';
+  static const String nid = '1029384987';
+  // static const String name = 'Mr.karim Uddin';
+  static const String name = 'Mr.kalam Uddin';
   static const String profession = 'Software Engineer';
-  static final BigInt accountBalance = BigInt.from(70218);
-  static final BigInt totalTransactions = BigInt.from(150520);
+  static final BigInt accountBalance = BigInt.from(702018);
+  static final BigInt totalTransactions = BigInt.from(15505200);
   static final BigInt onTimePayments = BigInt.from(
     45,
   ); // Assuming good payment history
-  static final BigInt missedPayments = BigInt.from(3); // Few missed payments
+  static final BigInt missedPayments = BigInt.from(2); // Few missed payments
   static final BigInt totalRemainingLoan = BigInt.from(83000);
   static final BigInt creditAgeMonths = BigInt.from(60); // 5 years
   static final BigInt professionRiskScore = BigInt.from(
     20,
   ); // Low risk for tech industry
   static final BigInt monthlyIncome = BigInt.from(
-    80000,
+    90000,
   ); // Estimated monthly income
 }
