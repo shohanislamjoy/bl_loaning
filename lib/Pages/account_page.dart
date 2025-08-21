@@ -95,11 +95,14 @@ class _AccountPageState extends State<AccountPage> {
     }
 
     // Also check blockchain for any pending loans (keep original functionality)
-    _blockchainService.getPendingLoans(UserData.nid).then((loans) {
-      // Blockchain loans can be added here if needed
-    }).catchError((error) {
-      print('Error fetching pending loans: $error');
-    });
+    _blockchainService
+        .getPendingLoans(UserData.nid)
+        .then((loans) {
+          // Blockchain loans can be added here if needed
+        })
+        .catchError((error) {
+          print('Error fetching pending loans: $error');
+        });
   }
 
   @override
@@ -301,17 +304,11 @@ class _AccountPageState extends State<AccountPage> {
                         SizedBox(height: 4),
                         Text(
                           'Monthly EMI: ${_approvedLoans.first['monthlyEmi']} BDT',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black87,
-                          ),
+                          style: TextStyle(fontSize: 12, color: Colors.black87),
                         ),
                         Text(
                           'Next Payment Date: ${_approvedLoans.first['nextEmiDate']}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black87,
-                          ),
+                          style: TextStyle(fontSize: 12, color: Colors.black87),
                         ),
                       ],
                     ),

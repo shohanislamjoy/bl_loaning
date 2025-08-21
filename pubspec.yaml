@@ -1,8 +1,13 @@
-name: bl_flutter
-description: "A new Flutter project."
+name: easy_loan
+description: "Easy Loan - A blockchain-powered loan application system. Copyright © 2025 Shohan Islam Joy. All rights reserved."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# Easy Loan App - Developed by Shohan Islam Joy
+# Copyright © 2025 Shohan Islam Joy. All rights reserved.
+# Company: Shohan Tech Solutions
+# Contact: shohanislamjoy@gmail.com
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43

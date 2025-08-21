@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/blockchain_config.dart';
+import '../Pages/about_page.dart';
 
 /// A collection of shared widgets for consistent UI across the application
 class SharedWidgets {
@@ -59,7 +60,15 @@ class SharedWidgets {
                 onTap: () => Navigator.pushNamed(context, '/'),
                 child: _buildBottomNavItem(Icons.home, 'Home'),
               ),
-              _buildBottomNavItem(Icons.apps, 'Other Apps'),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
+                },
+                child: _buildBottomNavItem(Icons.info, 'About'),
+              ),
             ],
           ),
         ),

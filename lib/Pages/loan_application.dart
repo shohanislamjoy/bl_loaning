@@ -175,7 +175,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
       _showSuccessDialog(
         'Loan of ${_amountController.text} BDT approved and disbursed successfully!',
       );
-      
+
       // Clear the amount field after successful application
       _amountController.clear();
     } catch (e) {
@@ -192,7 +192,10 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
     // Store approved loan details with more comprehensive information
     final loanData = {
       'amount': amount.toString(),
-      'approvedDate': DateTime.now().toIso8601String().substring(0, 10), // Format: YYYY-MM-DD
+      'approvedDate': DateTime.now().toIso8601String().substring(
+        0,
+        10,
+      ), // Format: YYYY-MM-DD
       'interestRate': '12.5%',
       'duration': '12 months',
       'monthlyEmi': (amount.toInt() * 1.125 / 12).round().toString(),
@@ -212,12 +215,15 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
     print('Loan approved: $loanData');
 
     // Update user's total remaining loan in UserData (simulating persistence)
-    UserData.totalRemainingLoan = amount; // Set to current loan amount instead of adding
-    
+    UserData.totalRemainingLoan =
+        amount; // Set to current loan amount instead of adding
+
     // Store the loan data in UserData for display purposes
     UserData.lastApprovedLoan = loanData;
 
-    print('Updated UserData.totalRemainingLoan: ${UserData.totalRemainingLoan}');
+    print(
+      'Updated UserData.totalRemainingLoan: ${UserData.totalRemainingLoan}',
+    );
     print('Loan amount approved: ${amount}');
   }
 
@@ -244,7 +250,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
     final RegExp regExp = RegExp(r'(\d+) BDT');
     final match = regExp.firstMatch(message);
     final loanAmount = match?.group(1) ?? '0';
-    
+
     showDialog(
       context: context,
       barrierDismissible: false, // Prevent dismissing by tapping outside
@@ -256,11 +262,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
           ),
           title: Row(
             children: [
-              Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 32,
-              ),
+              Icon(Icons.check_circle, color: Colors.green, size: 32),
               SizedBox(width: 12),
               Text(
                 'Loan Approved!',
@@ -305,10 +307,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
                       'Interest Rate',
                       '12.5% per annum',
                     ),
-                    SharedWidgets.buildDataRow(
-                      'Loan Duration',
-                      '12 months',
-                    ),
+                    SharedWidgets.buildDataRow('Loan Duration', '12 months'),
                     SharedWidgets.buildDataRow(
                       'Monthly EMI',
                       '${(int.tryParse(loanAmount)! * 1.125 / 12).round()} BDT',
@@ -320,10 +319,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
               SizedBox(height: 16),
               Text(
                 'The loan amount has been credited to your account successfully. You can check your account details for more information.',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),
@@ -355,7 +351,7 @@ class _LoanApplicationPageState extends State<LoanApplicationPage> {
         );
       },
     );
-    
+
     // Auto-dismiss after 10 seconds if user doesn't interact
     Future.delayed(Duration(seconds: 10), () {
       if (Navigator.canPop(context)) {

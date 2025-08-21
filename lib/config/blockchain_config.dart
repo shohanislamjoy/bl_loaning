@@ -25,13 +25,13 @@ class UserData {
   static const String nid = '1029384957';
   // static const String name = 'Mr.karim Uddin';
   static const String name = 'Mr.Hamim Alam';
-  static const String profession = 'Software Engineer';
-  static final BigInt accountBalance = BigInt.from(70208);
+  static const String profession = 'junior Software Engineer';
+  static final BigInt accountBalance = BigInt.from(508088);
   static final BigInt totalTransactions = BigInt.from(1505200);
   static final BigInt onTimePayments = BigInt.from(
     45,
   ); // Assuming good payment history
-  static final BigInt missedPayments = BigInt.from(2); // Few missed payments
+  static final BigInt missedPayments = BigInt.from(1); // Few missed payments
   static BigInt totalRemainingLoan = BigInt.from(
     83000,
   ); // Made non-final to allow updates
@@ -42,7 +42,7 @@ class UserData {
   static final BigInt monthlyIncome = BigInt.from(
     90000,
   ); // Estimated monthly income
-  
+
   // Store the last approved loan data
   static Map<String, dynamic>? lastApprovedLoan;
 }

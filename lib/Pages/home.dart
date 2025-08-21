@@ -140,7 +140,7 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
               SizedBox(height: 8),
-              SharedWidgets.buildDataRow('Max Loan Amount', '1,500,000 BDT'),
+              // SharedWidgets.buildDataRow('Max Loan Amount', '1,500,000 BDT'),
               SharedWidgets.buildDataRow('Interest Rate', '12.5% per annum'),
               SharedWidgets.buildDataRow('Processing Time', 'Instant approval'),
               SharedWidgets.buildDataRow('Repayment Period', 'Up to 12 months'),
