@@ -35,7 +35,7 @@ class BlockchainConfig {
 
   // Contract details (replace with your actual deployed contract address)
   static const String contractAddress =
-      '0x0629904487d908D5C5fCe3B89C8234fcf4d78DAE';
+      '0x5E1941260E93fA191a0F5d95608f33996a005F9f';
 
   // Developer private key (⚠️ Only for testing! Never expose real wallet keys)
   static const String privateKey =
