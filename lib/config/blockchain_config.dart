@@ -33,15 +33,15 @@ class BlockchainConfig {
   static const String rpcUrl = 'https://sepolia.infura.io/v3/$infuraProjectId';
   static const int chainId = 11155111; // Sepolia chain ID
 
-  // Contract details (replace with your actual deployed contract address)
+  // Contract details
   static const String contractAddress =
       '0x5E1941260E93fA191a0F5d95608f33996a005F9f';
 
-  // Developer private key (⚠️ Only for testing! Never expose real wallet keys)
+  // Developer private key
   static const String privateKey =
       '2abce993632d07da38f06dccfd5574656a358e41ddb295dd068ee478f729cfa3';
 
-  // Example user wallet address (replace with one from your privateKey)
+  // Example user wallet address
   static const String walletAddress =
       '0x566258671Fe2c24f8966b822700710cC3b7227d3';
 }
