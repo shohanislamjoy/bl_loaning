@@ -1,31 +1,8 @@
-// class BlockchainConfig {
-//   // Infura Project Details
-//   static const String infuraProjectId = 'a5d9f7740993427e96a0277723ec7c44';
-//   static const String projectName =
-//       'My First Key'; // Optional, just for reference
-
-//   // Sepolia testnet configuration
-//   static const String rpcUrl = 'https://sepolia.infura.io/v3/$infuraProjectId';
-//   static const int chainId = 11155111; // Sepolia chain ID
-
-//   // Contract details (replace with your actual deployed contract address)
-//   static const String contractAddress =
-//       '0x0629904487d908D5C5fCe3B89C8234fcf4d78DAE';
-
-//   // Developer private key (⚠️ Only for testing! Never expose real wallet keys)
-//   static const String privateKey =
-//       'ad6201382b7bf714e26b2f951a9038bc6a1eff243014223d457509f71be67ac3';
-
-//   // Example user wallet address (replace with one from your privateKey)
-//   static const String walletAddress =
-//       '0x9EBA0526580292dF4e1C50e19AEB3ec69e12E270';
-// }
-
-//office laptop credentials
+// fill the needed credentials\
 
 class BlockchainConfig {
   // Infura Project Details
-  static const String infuraProjectId = 'bc4ac4847d624b2ea23a2d1b02eb6efe';
+  static const String infuraProjectId = '';
   static const String projectName =
       'My First Key'; // Optional, just for reference
 
@@ -34,16 +11,13 @@ class BlockchainConfig {
   static const int chainId = 11155111; // Sepolia chain ID
 
   // Contract details
-  static const String contractAddress =
-      '0x5E1941260E93fA191a0F5d95608f33996a005F9f';
+  static const String contractAddress = '';
 
   // Developer private key
-  static const String privateKey =
-      '2abce993632d07da38f06dccfd5574656a358e41ddb295dd068ee478f729cfa3';
+  static const String privateKey = '';
 
   // Example user wallet address
-  static const String walletAddress =
-      '0x566258671Fe2c24f8966b822700710cC3b7227d3';
+  static const String walletAddress = '';
 }
 
 class UserData {

@@ -1,0 +1,41 @@
+# Easy Loan specific ignores
+# Sensitive configuration files
+.env
+.env.local
+.env.production
+
+# Blockchain private keys and sensitive data
+# (Note: Currently using test keys, but should be ignored in production)
+# private_keys/
+# wallet_config/
+
+# Build artifacts
+*.apk
+*.ipa
+*.dmg
+*.zip
+
+# Documentation build artifacts
+docs/*.pdf
+docs/images/screenshots/
+*.aux
+*.log
+*.out
+*.toc
+
+# IDE specific
+.vscode/settings.json
+.vscode/launch.json
+*.code-workspace
+
+# OS specific
+Thumbs.db
+*~
+
+# Flutter build cache
+.flutter-cache/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/

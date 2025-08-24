@@ -1,0 +1,65 @@
+MIT License
+
+Copyright (c) 2025 Shohan Islam Joy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Additional Terms for Easy Loan Project:
+
+1. ATTRIBUTION REQUIREMENT
+   - When using this software for commercial purposes, clear attribution to 
+     "Shohan Islam Joy" and "Shohan Tech Solutions" must be maintained in 
+     all user-facing interfaces and documentation.
+
+2. BLOCKCHAIN COMPONENTS
+   - Smart contracts and blockchain integration code remain under MIT license
+   - Deployed contracts on blockchain networks are governed by network rules
+   - Private keys and wallet credentials are excluded from this license
+
+3. TRADEMARK NOTICE
+   - "Easy Loan" and associated branding elements are trademarks of 
+     Shohan Tech Solutions
+   - Commercial use of trademark requires separate permission
+
+4. EDUCATIONAL USE
+   - This software is provided for educational and research purposes
+   - Academic use is encouraged with proper attribution
+   - Commercial deployment should include original author attribution
+
+5. CONTRIBUTION AGREEMENT
+   - By contributing to this project, contributors agree to license their 
+     contributions under the same MIT license terms
+   - Contributors retain copyright to their individual contributions
+
+6. LIMITATION OF LIABILITY
+   - This software involves blockchain technology and financial operations
+   - Users assume all risks associated with cryptocurrency and smart contracts
+   - Authors are not liable for financial losses or blockchain-related issues
+
+For questions regarding licensing, commercial use, or trademark permissions,
+contact: shohanislamjoy@gmail.com
+
+---
+
+Shohan Tech Solutions
+Developed by: Shohan Islam Joy
+GitHub: https://github.com/shohanislamjoy
+Email: shohanislamjoy@gmail.com
