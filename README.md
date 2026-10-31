@@ -15,6 +15,25 @@
 
 ---
 
+## 📚 Research Publication
+
+This project is based on our research paper published in **IEEE Xplore**, presenting a blockchain-powered approach to improving financial accessibility through decentralized credit scoring and automated personal loan approval.
+
+**Paper Title:**
+
+[Enhancing Consumers’ Financial Accessibility with Blockchain-Powered Credit Scoring: A Decentralized Method for Approval of Personal Loans](https://ieeexplore.ieee.org/document/11229632)
+
+**Publication:** IEEE Xplore
+
+**Research Focus:**
+- Blockchain-powered decentralized credit scoring
+- Alternative financial data for creditworthiness assessment
+- Smart contract-based automated personal loan approval
+- Improving financial inclusion through transparent and secure lending mechanisms
+
+🔗 **Read the Full Research Paper:** [IEEE Xplore – Document 11229632](https://ieeexplore.ieee.org/document/11229632)
+
+---
 ## 🌟 Key Features
 
 ### 🔐 **Blockchain Security**
